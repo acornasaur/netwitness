@@ -42,7 +42,7 @@ function ttl:sessionBegin()
 	local responseStream = nwsession.getResponseStream()
 	
 	if requestStream then		
-		local firstpreq = nwsession.getFirstPacket(requestStream)
+		local firstpreq = nwstream.getFirstPacket(requestStream)
 
 		local payload = nwpacket.tostring(firstpreq,1,32)
 		if payload then
@@ -68,7 +68,7 @@ function ttl:sessionBegin()
 	end
 	
 	if responseStream then		
-		local firstpresp = nwsession.getFirstPacket(responseStream)
+		local firstpresp = nwstream.getFirstPacket(responseStream)
 
 		local payload = nwpacket.tostring(firstpresp,1,32)
 		if payload then
