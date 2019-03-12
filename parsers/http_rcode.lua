@@ -39,6 +39,7 @@ local luahttprcode = nw.createParser("lua_http_rcode", "LUA HTTP RESPONSE CODES"
 -- declare the meta keys we'll be registering meta with
 luahttprcode:setKeys({
 	nwlanguagekey.create("result.code"),
+	nwlanguagekey.create("analysis.service"),
 })
 
 -- Step 4 - Do SOMETHING once your token matched
@@ -74,6 +75,10 @@ function luahttprcode:tokenRESPONSE(token, first, last)
 			-- register what was read as meta
 			--nw.logInfo("***HTTP RESPONSE CODE: " .. string_temp .. " ***")
 			nw.createMeta(self.keys["result.code"], string_temp2)
+			local extraspace = string.find(string_temp2, " ", -1, -1)
+			if extraspace then
+				nw.createMeta(self.keys["analysis.service"], "http_extraneous_space_in_response_code")
+			end
 		end
 	end
 end
