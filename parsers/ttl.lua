@@ -37,7 +37,7 @@ ttl:setKeys({
 
 
 function ttl:sessionBegin()
-
+	
 	local requestStream = nwsession.getRequestStream()
 	local responseStream = nwsession.getResponseStream()
 	
@@ -47,7 +47,7 @@ function ttl:sessionBegin()
 		local payload = nwpacket.tostring(firstpreq,1,32)
 		if payload then
 			-- Find the upper layer protocol type for IP (0x800) and move forward 1 byte into it.
-			local ipheaderpos = payload:find("\008\000", 1, -1)
+			local ipheaderpos = payload:find("\008\000", 13, -1)
 			if ipheaderpos then
 				local iphdr = ipheaderpos + 2
 				-- Find the time to live (TTL) value in the IP header
@@ -73,7 +73,7 @@ function ttl:sessionBegin()
 		local payload = nwpacket.tostring(firstpresp,1,32)
 		if payload then
 			-- Find the upper layer protocol type for IP (0x800) and move forward 1 byte into it.
-			local ipheaderpos = payload:find("\008\000", 1, -1)
+			local ipheaderpos = payload:find("\008\000", 13, -1)
 			if ipheaderpos then
 				local iphdr = ipheaderpos + 2
 				-- Find the time to live (TTL) value in the IP header
