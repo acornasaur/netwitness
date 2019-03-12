@@ -652,6 +652,16 @@ function lua_interesting_commands:tokenDRSUAPI(token, first, last)
 	nw.createMeta(self.keys["analysis.service"], "drsuapi")		
 end
 
+function lua_interesting_commands:tokenDIRLIST(token, first, last)
+	--register meta
+	nw.createMeta(self.keys["analysis.service"], "directory_listing")		
+end
+
+function lua_interesting_commands:tokenExtraSpace(token, first, last)
+	--register meta
+	nw.createMeta(self.keys["analysis.service"], "http_extraneous_space_after_ok")		
+end
+
 lua_interesting_commands:setCallbacks({
 	[nwevents.OnSessionBegin] = lua_interesting_commands.sessionBegin,
 	["::FromBase64String"] = lua_interesting_commands.b64,
@@ -866,7 +876,7 @@ lua_interesting_commands:setCallbacks({
 	["m^s^h^t"] = lua_interesting_commands.mshtaObfusc,
 	["msh^t"] = lua_interesting_commands.mshtaObfusc,
 	["<ms:script "] = lua_interesting_commands.msScriptXML,
-	["This is the default web page for this server"] = lua_interesting_commands.possEmpire,
+--	["This is the default web page for this server"] = lua_interesting_commands.possEmpire,
 	["IO.MemoryStream"] = lua_interesting_commands.powershellIOMemory,
 	["IO.StreamReader"] = lua_interesting_commands.powershellIOMemory,
 	[".RegRead"] = lua_interesting_commands.regRead,
@@ -1082,7 +1092,7 @@ lua_interesting_commands:setCallbacks({
 	["Sorry, no data corresponding your request."] = lua_interesting_commands.tokenCobaltStrike,
 	["4C1158CCBAFC4896AD78ED0FF0F4A1B2"] = lua_interesting_commands.tokenCobaltStrike,
 	["dbb8796a80d45e1f"] = lua_interesting_commands.tokenCobaltStrike,
-	["^HTTP/1.1 200 OK "] = lua_interesting_commands.tokenCobaltStrike,
+	["^HTTP/1.1 200 OK "] = lua_interesting_commands.tokenExtraSpace,
     ["TVpaZgAASUkq"] = lua_interesting_commands.tokenBase64EXE,
     ["TVqOAQEAAAAE"] = lua_interesting_commands.tokenBase64EXE,
     ["TVrvAAEAAAAE"] = lua_interesting_commands.tokenBase64EXE,
@@ -1195,5 +1205,5 @@ lua_interesting_commands:setCallbacks({
    	["BJAG4AdgBvAGsAZQAt"] = lua_interesting_commands.tokenB64Invoke,
     ["HAAYQBzAHQAZQBiAGkAbgAuAGMAbwBt"] = lua_interesting_commands.tokenB64PasteBin,  	
     ["\53\66\81\227\6\75\209\17\171\4\0\192\79\194\220\210"] = lua_interesting_commands.tokenDRSUAPI, -- 35 42 51 e3 06 4b d1 11 ab 04 00 c0 4f c2 dc d2   
-    	
+    ["<title>Directory listing for "] = lua_interesting_commands.tokenDIRLIST,
 })
