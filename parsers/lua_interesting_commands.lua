@@ -662,6 +662,11 @@ function lua_interesting_commands:tokenExtraSpace(token, first, last)
 	nw.createMeta(self.keys["analysis.service"], "http_extraneous_space_after_ok")		
 end
 
+function lua_interesting_commands:tokenREMCOS(token, first, last)
+	--register meta
+	nw.createMeta(self.keys["ioc"], "possible_remcos")		
+end
+
 lua_interesting_commands:setCallbacks({
 	[nwevents.OnSessionBegin] = lua_interesting_commands.sessionBegin,
 	["::FromBase64String"] = lua_interesting_commands.b64,
@@ -1209,4 +1214,5 @@ lua_interesting_commands:setCallbacks({
     ["HAAYQBzAHQAZQBiAGkAbgAuAGMAbwBt"] = lua_interesting_commands.tokenB64PasteBin,  	
     ["\53\66\81\227\6\75\209\17\171\4\0\192\79\194\220\210"] = lua_interesting_commands.tokenDRSUAPI, -- 35 42 51 e3 06 4b d1 11 ab 04 00 c0 4f c2 dc d2   
     ["<title>Directory listing for "] = lua_interesting_commands.tokenDIRLIST,
+    ["\27\132\213\176\93\244\196\147\197\48\194"] = lua_interesting_commands.tokenREMCOS, -- 1b 84 d5 b0 5d f4 c4 93 c5 30 c2
 })
