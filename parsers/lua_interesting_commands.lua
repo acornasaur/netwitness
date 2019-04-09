@@ -667,6 +667,17 @@ function lua_interesting_commands:tokenREMCOS(token, first, last)
 	nw.createMeta(self.keys["ioc"], "possible_remcos")		
 end
 
+function lua_interesting_commands:tokenAPOSTT(token, first, last)
+	if first == 1 then
+		local protocol, srcPort, dstPort  = nw.getTransport()
+		if protocol == 6 and srcPort > 1024 then
+			--register meta
+			nw.createMeta(self.keys["ioc"], "possible_apost_t")		
+		end
+	end
+end
+
+
 lua_interesting_commands:setCallbacks({
 	[nwevents.OnSessionBegin] = lua_interesting_commands.sessionBegin,
 	["::FromBase64String"] = lua_interesting_commands.b64,
@@ -1215,4 +1226,5 @@ lua_interesting_commands:setCallbacks({
     ["\53\66\81\227\6\75\209\17\171\4\0\192\79\194\220\210"] = lua_interesting_commands.tokenDRSUAPI, -- 35 42 51 e3 06 4b d1 11 ab 04 00 c0 4f c2 dc d2   
     ["<title>Directory listing for "] = lua_interesting_commands.tokenDIRLIST,
     ["\27\132\213\176\93\244\196\147\197\48\194"] = lua_interesting_commands.tokenREMCOS, -- 1b 84 d5 b0 5d f4 c4 93 c5 30 c2
+    ["\53\0\0\0"] = lua_interesting_commands.tokenAPOSTT, -- 35 00 00 00 
 })
