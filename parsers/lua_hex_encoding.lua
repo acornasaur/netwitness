@@ -21,11 +21,11 @@ function lua_hex_encoding:sessionBegin()
 end
 
 function lua_hex_encoding:tokenFIND(token, first, last)
-   if #hexval <= 50 then
+   if #hexval <= 100 then
         table.insert(hexval, token)
     end
     -- if we have our tokens in the table, then lets call it what it is
-    if #hexval == 50 then
+    if #hexval == 100 then
         -- register meta
         --nw.logInfo("*** POSSIBLE_\X_ENCODING ***")
         nw.createMeta(self.keys["ioc"], "possible_hex_encoding")      
