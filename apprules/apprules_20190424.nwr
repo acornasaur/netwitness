@@ -64,3 +64,4 @@ name=inbound_445 rule="ioc='inbound_445'" alert=ioc order=564 type=application
 name=suspicious_exe_extension rule="filetype = 'windows executable' && filename exists && extension !='exe','dll','msi'" alert=ioc order=565 type=application
 name=cobalt_strike_smb_c2 rule="(service = 139 && filename begins 'msagent_')" alert=ioc order=566 type=application
 name=eval_in_useragent rule="service = 80 && client contains 'eval('" alert=ioc order=377 type=application 
+name=user_agent_bash rule="client contains 'bash'" alert=ioc order=399 type=application 
