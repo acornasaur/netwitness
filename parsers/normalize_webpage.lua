@@ -4,14 +4,15 @@ local nwll = require('nwll')
 
 normalize_webpage:setKeys({
     nwlanguagekey.create("alias.host"),
-    nwlanguagekey.create("alias.ip"),
+    nwlanguagekey.create("alias.ip", nwtypes.IPv4),
     nwlanguagekey.create("directory"),
     nwlanguagekey.create("filename"),
     nwlanguagekey.create("extension"),
     nwlanguagekey.create("query"),
 })
- 
-function normalize_webpage:normalize_webpageMeta(index, meta)
+
+
+function normalize_webpage:webpageMeta(index, meta)
     local host, directory, filename, extension, querystring = nwll.extractUrlElements(meta)
     if host then
         local key
@@ -35,5 +36,7 @@ function normalize_webpage:normalize_webpageMeta(index, meta)
 end
 
 normalize_webpage:setCallbacks({
-    [nwlanguagekey.create("web.page")] = normalize_webpage.normalize_webpageMeta,
+    [nwlanguagekey.create("web.page")] = normalize_webpage.webpageMeta,
+    [nwlanguagekey.create("url")] = normalize_webpage.webpageMeta,
 })
+
