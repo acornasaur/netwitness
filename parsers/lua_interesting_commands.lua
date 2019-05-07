@@ -677,6 +677,16 @@ function lua_interesting_commands:tokenAPOSTT(token, first, last)
 	end
 end
 
+function lua_interesting_commands:tokenLOKIBOT(token, first, last)
+	if first <= 512 then
+		local protocol, srcPort, dstPort  = nw.getTransport()
+		if protocol == 6 and srcPort > 1024 then
+			--register meta
+			nw.createMeta(self.keys["ioc"], "possible_lokibot")		
+		end
+	end
+end
+
 
 lua_interesting_commands:setCallbacks({
 	[nwevents.OnSessionBegin] = lua_interesting_commands.sessionBegin,
@@ -1227,4 +1237,7 @@ lua_interesting_commands:setCallbacks({
     ["<title>Directory listing for "] = lua_interesting_commands.tokenDIRLIST,
     ["\27\132\213\176\93\244\196\147\197\48\194"] = lua_interesting_commands.tokenREMCOS, -- 1b 84 d5 b0 5d f4 c4 93 c5 30 c2
     ["\53\0\0\0"] = lua_interesting_commands.tokenAPOSTT, -- 35 00 00 00 
+    ["\18\0\39\0\0\0\7\0\0\0"] = lua_interesting_commands.tokenLOKIBOT, -- 12 00 27 00 00 00 07 00 00 00
+    ["\18\0\40\0\0\0\7\0\0\0"] = lua_interesting_commands.tokenLOKIBOT, -- 12 00 28 00 00 00 07 00 00 00
+    
 })
