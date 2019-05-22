@@ -34,7 +34,7 @@ Detect Windows Minidump files.
     
     NOTES
 
-
+		Big shout out to Joe Kulp for the idea and helping with the testing.
        
 
 --]=]
