@@ -37,6 +37,11 @@ lua_suspicious_tld:setKeys({
     nwlanguagekey.create("ioc", nwtypes.Text),
 })
 
+function lua_suspicious_tld:sessionBegin()
+	-- reset parser_state for the new session
+	count = 0
+end
+
 -- This is our function.  What we want to do when we match a token...or in this case, the 
 -- meta callback.
 function lua_suspicious_tld:tldMeta(index, meta)
@@ -57,6 +62,10 @@ function lua_suspicious_tld:tldMeta(index, meta)
 				return
 			else
 				nw.createMeta(self.keys["ioc"], "suspicious_tld")
+				count = count + 1
+				if count == 10 then
+					nw.createMeta(self.keys["ioc"], "possible_dns_tunneling")
+				end
 			end
 
 		end
@@ -64,5 +73,6 @@ function lua_suspicious_tld:tldMeta(index, meta)
 end
 
 lua_suspicious_tld:setCallbacks({
+	[nwevents.OnSessionBegin] = lua_suspicious_tld.sessionBegin,
     [nwlanguagekey.create("tld")] = lua_suspicious_tld.tldMeta,  -- this is the meta callback key
 })
