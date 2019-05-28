@@ -687,6 +687,20 @@ function lua_interesting_commands:tokenLOKIBOT(token, first, last)
 	end
 end
 
+function lua_interesting_commands:tokenPHP(token, first, last)
+	--register meta
+	nw.createMeta(self.keys["analysis.service"], "php")		
+end
+
+function lua_interesting_commands:tokenEVAL(token, first, last)
+	--register meta
+	nw.createMeta(self.keys["analysis.service"], "eval")		
+end
+
+function lua_interesting_commands:tokenB64DECODE(token, first, last)
+	--register meta
+	nw.createMeta(self.keys["analysis.service"], "base64_decode")		
+end
 
 lua_interesting_commands:setCallbacks({
 	[nwevents.OnSessionBegin] = lua_interesting_commands.sessionBegin,
@@ -1239,5 +1253,8 @@ lua_interesting_commands:setCallbacks({
     ["\53\0\0\0"] = lua_interesting_commands.tokenAPOSTT, -- 35 00 00 00 
     ["\18\0\39\0\0\0\7\0\0\0"] = lua_interesting_commands.tokenLOKIBOT, -- 12 00 27 00 00 00 07 00 00 00
     ["\18\0\40\0\0\0\7\0\0\0"] = lua_interesting_commands.tokenLOKIBOT, -- 12 00 28 00 00 00 07 00 00 00
-    
+    ["^<?php"] = lua_interesting_commands.tokenPHP,
+    ["eval("] = lua_interesting_commands.tokenEVAL,
+    ["eval ("] = lua_interesting_commands.tokenEVAL,
+    ["base64_decode("] = lua_interesting_commands.tokenB64DECODE,
 })
