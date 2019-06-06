@@ -58,32 +58,20 @@ function lua_domain_depth:hostMeta(index, host)
 			if ipcheck == true then
 				return
 			else
-				--nw.logInfo("*** IP CHECK FALSE: " .. host .. " ***")
-				-- this should give us the host
-				-- now build a table to find and hold the positions of all the dots
-				found, foundpos = {}, 0
-				repeat
-					loopagain = false
-					foundpos = string.find(host, "%.", foundpos)
-					if foundpos then
-						foundpos = foundpos + 1
-						table.insert(found, foundpos)
-						loopagain = true
-					end
-				until loopagain == false
-				-- we should have found the position of all the dots
-				-- loop through the positions and compare extracted data against tld table
+				local numDots = 0
+				for dot in string.gmatch(host, "%.") do
+					numDots = numDots + 1
+				end
 		
-				count = #found  -- this gives us the total number of entries in the table
+				local count = numDots -- this gives us the total number of entries in the table
 			
 				if count == 0 then
 					return
 				else
 					nw.createMeta(self.keys["domain.depth"], count)
-					--nw.logInfo("*** META: host_dot_count_" .. count .. " ***")
+					--nw.logInfo("*** DOMAIN DEPTH: " .. count .. " ***")
 				end		
-			end
-			
+			end		
 		end	
 	end
 end
