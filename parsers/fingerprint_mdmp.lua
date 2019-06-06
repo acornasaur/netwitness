@@ -85,7 +85,3 @@ fingerprint_mdmp:setCallbacks({
 
 
 return summary
-
-
-
--- 6c 00 73 00 61 00 73 00 73 00 2e 00 65 00 78 00 65 00
