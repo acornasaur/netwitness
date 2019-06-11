@@ -703,6 +703,11 @@ function lua_interesting_commands:tokenB64DECODE(token, first, last)
 	nw.createMeta(self.keys["analysis.service"], "base64_decode")		
 end
 
+function lua_interesting_commands:tokenHEXB64DECODE(token, first, last)
+	--register meta
+	nw.createMeta(self.keys["ioc"], "hex_encoded_base64_decode")		
+end
+
 function lua_interesting_commands:tokenNIXFILEPERMS(token, first, last)
 	if nixfileperms == 1 then
 		return
@@ -1268,6 +1273,7 @@ lua_interesting_commands:setCallbacks({
     ["eval("] = lua_interesting_commands.tokenEVAL,
     ["eval ("] = lua_interesting_commands.tokenEVAL,
     ["base64_decode("] = lua_interesting_commands.tokenB64DECODE,
+    ["6261736536345f6465636f6465"] = lua_interesting_commands.tokenHEXB64DECODE,
 	["--------w-"] = lua_interesting_commands.tokenNIXFILEPERMS,
 	["--------wT"] = lua_interesting_commands.tokenNIXFILEPERMS,
 	["--------wt"] = lua_interesting_commands.tokenNIXFILEPERMS,
