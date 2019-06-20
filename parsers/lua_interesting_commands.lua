@@ -94,7 +94,7 @@ end
 
 function lua_interesting_commands:echoNetstat(token, first, last)
 	-- register meta
-	nw.createMeta(self.keys.ioc, "echo-netstat")		
+	nw.createMeta(self.keys.ioc, "echo-zstat")		
 end
 
 function lua_interesting_commands:echoHostname(token, first, last)
@@ -715,6 +715,14 @@ function lua_interesting_commands:tokenNIXFILEPERMS(token, first, last)
 		--register meta
 		nw.createMeta(self.keys["ioc"], "file_permissions_output")		
 		nixfileperms = 1
+	end
+end
+
+function lua_interesting_commands:tokenB64GZIP(token, first, last)
+	local app = nw.getAppType() 
+	if app == 443 then
+	--register meta
+		nw.createMeta(self.keys["ioc"], "ssl_b64_gzip_content")		
 	end
 end
 
@@ -5366,4 +5374,5 @@ lua_interesting_commands:setCallbacks({
 	["-rwxrwxrwT"] = lua_interesting_commands.tokenNIXFILEPERMS,
 	["-rwxrwxrwt"] = lua_interesting_commands.tokenNIXFILEPERMS,
 	["-rwxrwxrwx"] = lua_interesting_commands.tokenNIXFILEPERMS,
+	["H4sIAAAA"] = lua_interesting_commands.tokenB64GZIP,
 })
