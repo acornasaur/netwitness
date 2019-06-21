@@ -5,11 +5,18 @@ lua_interesting_commands:setKeys({
 	nwlanguagekey.create("ioc",nwtypes.Text),
 	nwlanguagekey.create("analysis.session",nwtypes.Text),
 	nwlanguagekey.create("analysis.service",nwtypes.Text),
+	nwlanguagekey.create("interesting",nwtypes.Text),
 })
 
 function isBase64(s)
 --return (s:len() >= 4) and (s:len() % 4 == 0) and not s:match('[^%a%d%+%/=]+')
 return (s:len() >= 4) and not s:match('[^%a%d%+%/=]+')
+end
+
+function string.tohex(str)
+    return (str:gsub('.', function (c)
+        return string.format('%02X', string.byte(c))
+    end))
 end
 
 function lua_interesting_commands:sessionBegin()
@@ -722,7 +729,15 @@ function lua_interesting_commands:tokenB64GZIP(token, first, last)
 	local app = nw.getAppType() 
 	if app == 443 then
 	--register meta
-		nw.createMeta(self.keys["ioc"], "ssl_b64_gzip_content")		
+		nw.createMeta(self.keys["ioc"], "ssl_b64_gzip_content")	
+		current_position = first
+		local payload = nw.getPayload(current_position, current_position + 255)
+		if payload then
+			local paytemp = payload:tostring(1, -1)
+			if paytemp then
+				nw.createMeta(self.keys["interesting"], paytemp)
+			end
+		end			
 	end
 end
 
