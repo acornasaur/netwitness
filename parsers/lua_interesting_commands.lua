@@ -6,6 +6,7 @@ lua_interesting_commands:setKeys({
 	nwlanguagekey.create("analysis.session",nwtypes.Text),
 	nwlanguagekey.create("analysis.service",nwtypes.Text),
 	nwlanguagekey.create("interesting",nwtypes.Text),
+	nwlanguagekey.create("notrunc",nwtypes.UInt8),
 })
 
 function isBase64(s)
@@ -730,12 +731,30 @@ function lua_interesting_commands:tokenB64GZIP(token, first, last)
 	if app == 443 then
 	--register meta
 		nw.createMeta(self.keys["ioc"], "ssl_b64_gzip_content")	
+		nw.createMeta(self.keys["notrunc"], 1)	
 		current_position = first
 		local payload = nw.getPayload(current_position, current_position + 255)
 		if payload then
 			local paytemp = payload:tostring(1, -1)
 			if paytemp then
 				nw.createMeta(self.keys["interesting"], paytemp)
+			end
+		end			
+	end
+end
+
+function lua_interesting_commands:tokenScriptFunction(token, first, last)
+	local app = nw.getAppType() 
+	if app == 80 then
+		current_position = last + 1
+		local payload = nw.getPayload(current_position, current_position + 1024)
+		if payload then
+			local paytemp = payload:tostring(1, -1)
+			if paytemp then
+				local findvar = payload:find("dmFyI", 1, -1)
+				if findvar then
+					nw.createMeta(self.keys["ioc"], "b64_encoded_var_in_script")
+				end
 			end
 		end			
 	end
@@ -5390,4 +5409,5 @@ lua_interesting_commands:setCallbacks({
 	["-rwxrwxrwt"] = lua_interesting_commands.tokenNIXFILEPERMS,
 	["-rwxrwxrwx"] = lua_interesting_commands.tokenNIXFILEPERMS,
 	["H4sIAAAA"] = lua_interesting_commands.tokenB64GZIP,
+	["<script>function "] = lua_interesting_commands.tokenScriptFunction,
 })
